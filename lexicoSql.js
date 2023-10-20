@@ -2,7 +2,7 @@
  * 21760028
  * Lexico para analizar querys de MySQL
  * */
-function lexSql(input){
+function lexicoSql(input){
     const words = {
         1: ' ',
         2: '+',
@@ -156,7 +156,7 @@ function lexSql(input){
     let posicionActual = 0;
     const tokens = [];
 
-    while(posicionActual < input.lenght){
+    while(posicionActual < input.length){
         let char = input[posicionActual];
         let token = {type: null, value: ''};
 
@@ -182,7 +182,7 @@ function lexSql(input){
         }
 
         //Identificadores
-        else if(/[a-zA-Z-Z_]/.test(char)){
+        else if(/[a-zA-Z_]/.test(char)){
             while(/[a-zA-Z0-9_]/.test(char)){
                 token.value += char;
                 posicionActual++;
@@ -202,25 +202,21 @@ function lexSql(input){
                 posicionActual++;
                 char = input[currentPos];
             }
-                tokens.push(`${token.value} : número`);
-        } else if (words[char] !== undefined) {
+            tokens.push(`${token.value} : número`);
+            } else if (words[char] !== undefined) {
             tokens.push(`${char} : ${words[char]}`);
             posicionActual++;
-        } else {
+            } else {
             tokens.push(`${char} : operador inválido`);
-             posicionActual++;
+            posicionActual++;
+            }
         }
-        
     return tokens;
 }
     //ejemplo
     const query = "SELECT * FROM usuarios WHERE nombre ='Juan'";
-    const result = lexSql(query);
+    const result = lexicoSql(query);
     console.log(result)
-
-
-
-
-
+    
 
 
