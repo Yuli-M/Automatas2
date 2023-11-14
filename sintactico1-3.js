@@ -751,41 +751,48 @@ const keywords = {
 	816 : "ZONE",
 	999 : "", 
 }
-let unarray;
-function la_validation(palabrasss){
-    let tokens = []
-    for(let i = 0; i < splited_line.length; i++){
-        for(const [key, value] of Object.entries(keywords)){
-            if(splited_line[i] == keywords[key]){
-                console.log(`${key}: ${value}`)
-                for(a = 0; a < unarray.length; a++){
-                    if(splited_line[i] == unarray[a]){
-                        unarray.splice(i, 1)
-                    }
-                }
+let palabras;
+
+//Se compara keywords y el query para encontrar coincidencias, si se encuentran se muestran con su respectivo token numerico  
+function la_validation(splited_line) {
+    let filteredArray = [];
+
+    for (let i = 0; i < splited_line.length; i++) {
+        for (const [key, value] of Object.entries(keywords)) {
+            if (splited_line[i] == value) {
+                console.log(`${key}: ${value}`);
+                filteredArray.push(splited_line[i]);
             }
         }
-        if(unarray.some(palabra => palabra == splited_line[i]) == true)
-            console.log(`999: ${splited_line[i]}`)
     }
-}
-function query_validation(){
-    fs.readFile('query.txt', 'utf8', (err,data) => {
-        if(err){
-            console.log(err)
-            return
+    //eliminar los elementos correspondientes del arreglo palabras
+    filteredArray.forEach(item => {
+        const index = palabras.indexOf(item);
+        if (index !== -1) {
+            palabras.splice(index, 1);
         }
-        var splited_string = data.split('\n')
-        splited_string.pop()
-        for(let i = 0; i < splited_string.length; i++){
-            splited_line = splited_string[i].split(" ")
-            unarray = splited_line
-            console.log(splited_line)
-            console.log(unarray)
-            la_validation(splited_line)
-        }
-        
+    });
+    palabras.forEach(item => {
+        console.log(`999: ${item}`);
     });
 }
 
-query_validation()
+function query_validation() {
+    fs.readFile('query.txt', 'utf8', (err, data) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        const splited_string = data.split('\n');
+        splited_string.pop();
+        for (let i = 0; i < splited_string.length; i++) {
+            const splited_line = splited_string[i].split(" ");
+            console.log(splited_line);
+            palabras = splited_line.slice(); // clonar el array para evitar problemas con la modificación
+            console.log(palabras);
+            la_validation(splited_line);
+        }
+    });
+}
+
+query_validation();
