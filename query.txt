@@ -1,1 +1,3 @@
+SELECT name , edad FROM tabla ;
 SELECT * FROM usuarios WHERE nombre = 'Juan' 
+
